@@ -11,6 +11,7 @@ import com.example.hr.dto.request.HireEmployeeRequest;
 import com.example.hr.dto.response.EmployeeResponse;
 import com.example.hr.dto.response.FireEmployeeResponse;
 import com.example.hr.dto.response.HireEmployeeResponse;
+import com.example.hr.entity.EmployeeEntity;
 
 @Configuration
 public class ModelMapperConfiguration {
@@ -60,6 +61,21 @@ public class ModelMapperConfiguration {
 				employee.getPhoto().toBase64()
 				);
 	};
+	private static final Converter<Employee, EmployeeEntity> EMPLOYEE_TO_EMPLOYEE_ENTITY_CONVERTER = context -> {
+		var employee = context.getSource();
+		var entity = new EmployeeEntity();
+		entity.setIdentity(employee.getIdentity().getValue()); 
+		entity.setFirstName(employee.getFullname().firstName()); 
+		entity.setLastName(employee.getFullname().lastName());
+		entity.setIban(employee.getIban().getValue());
+		entity.setSalary(employee.getSalary().value());
+		entity.setCurrency(employee.getSalary().currency()); 
+		entity.setDepartments(employee.getDepartments());
+		entity.setJobStyle(employee.getJobStyle());
+		entity.setBirthYear(employee.getBirthYear().value()); 
+		entity.setPhoto(employee.getPhoto().values());
+		return entity;		
+	};
 	private static final Converter<HireEmployeeRequest, Employee> HIRE_EMPLOYEE_REQUEST_TO_EMPLOYEE_CONVERTER = context -> {
 		var request = context.getSource();
 		return new Employee.Builder()
@@ -73,6 +89,19 @@ public class ModelMapperConfiguration {
 				     .photo(request.photo())
 				     .build();
 	};
+	private static final Converter<EmployeeEntity, Employee> EMPLOYEE_ENTITY_TO_EMPLOYEE_CONVERTER = context -> {
+		var entity = context.getSource();
+		return new Employee.Builder()
+				.identity(entity.getIdentity()) 
+				.fullname(entity.getFirstName(),entity.getLastName()) 
+				.salary(entity.getSalary(),entity.getCurrency()) 
+				.iban(entity.getIban()) 
+				.departments(entity.getDepartments().toArray(new Department[0])) 
+				.jobStyle(entity.getJobStyle()) 
+				.birthYear(entity.getBirthYear()) 
+				.photo(entity.getPhoto())
+				.build();
+	};
 
 	@Bean
 	ModelMapper createModelMapper() {
@@ -81,6 +110,8 @@ public class ModelMapperConfiguration {
 		modelMapper.addConverter(HIRE_EMPLOYEE_REQUEST_TO_EMPLOYEE_CONVERTER,HireEmployeeRequest.class, Employee.class);
 		modelMapper.addConverter(EMPLOYEE_TO_HIRE_EMPLOYEE_RESPONSE_CONVERTER,Employee.class, HireEmployeeResponse.class);
 		modelMapper.addConverter(EMPLOYEE_TO_FIRE_EMPLOYEE_RESPONSE_CONVERTER,Employee.class, FireEmployeeResponse.class);
+		modelMapper.addConverter(EMPLOYEE_ENTITY_TO_EMPLOYEE_CONVERTER,EmployeeEntity.class, Employee.class);
+		modelMapper.addConverter(EMPLOYEE_TO_EMPLOYEE_ENTITY_CONVERTER,Employee.class, EmployeeEntity.class);
 		return modelMapper;
 	}
 }

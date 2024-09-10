@@ -2,6 +2,7 @@ package com.example.hr.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.hr.application.HrApplication;
 import com.example.hr.domain.Employee;
@@ -21,12 +22,14 @@ public class HrService {
 		this.modelMapper = modelMapper;
 	}
 
+	@Transactional
 	public HireEmployeeResponse hireEmployee(HireEmployeeRequest request) {
 		var employee = modelMapper.map(request, Employee.class);
 		var hiredEmployee = hrApplication.hireEmployee(employee);
 		return modelMapper.map(hiredEmployee,HireEmployeeResponse.class);
 	}
 
+	@Transactional
 	public FireEmployeeResponse fireEmployee(String identity) {
 		var firedEmployee = hrApplication.fireEmployee(TcKimlikNo.valueOf(identity))
 				                         .orElseThrow(() -> new IllegalArgumentException("Employee [%s] does not exist to fire".formatted(identity)));
