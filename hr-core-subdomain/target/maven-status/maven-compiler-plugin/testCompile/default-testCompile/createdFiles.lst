@@ -1,0 +1,8 @@
+com\example\hr\domain\InMemoryEmployeeRepository.class
+com\example\hr\domain\DepartmentTest.class
+com\example\hr\domain\DummyEventPublisher.class
+com\example\hr\domain\EmployeeTest.class
+com\example\hr\domain\IbanTest.class
+com\example\hr\domain\SalaryTest.class
+com\example\hr\domain\StandardHrApplicationTest.class
+com\example\hr\domain\FullNameTest.class

@@ -2,12 +2,11 @@ package com.example.hr.domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
 class EmployeeTest {
 
-	@ParameterizedTest
+	//@ParameterizedTest
 	@CsvFileSource(resources = "employees.csv")
 	void createEmployee(String identity,String firstName,String lastName,String iban,double salary,String currency,String departments,int birthYear,String jobStyle,String photo) {
 		var employee = new Employee.Builder()

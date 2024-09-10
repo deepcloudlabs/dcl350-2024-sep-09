@@ -1,0 +1,28 @@
+Domain -> Sub domain(s) -> [Event Storming]
+          - Core -> Modeling -> DDD: Strategic Patterns
+          - Generic
+          - Supporting
+
+Blue Book (Eric Evans, 2003), Red Book          
+Domain-Driven Design -> Modeling/Abstraction
+Strategic Patterns: i. Bounded-Context (BC)
+                   ii. Ubiquitous Language (UL) -> Model
+Analysis   -> Design
+Sub-domain -> BC + UL -> Microservice(s)
+Tactical Patterns: i. Entity/Aggregate/Value-Object
+                  ii. Repository
+                 iii. Domain Event
+                      . . .  
+sub-domain -> bc -- 1..* --> aggregate
+                 -- 1..* --> microservices
+
+
+world -> bc (country -- 1..* --> city)
+             country -- 0..1 --> city/capital  
+         entity: Country(Population), city(population)
+         aggregate: country
+          i. validation rules
+         ii. business rules
+        iii. invariants   
+         iv. constraints
+          v. regulations/standards                                          
