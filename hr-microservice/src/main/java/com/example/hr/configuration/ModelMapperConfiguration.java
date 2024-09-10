@@ -9,6 +9,7 @@ import com.example.hr.domain.Department;
 import com.example.hr.domain.Employee;
 import com.example.hr.dto.request.HireEmployeeRequest;
 import com.example.hr.dto.response.EmployeeResponse;
+import com.example.hr.dto.response.FireEmployeeResponse;
 import com.example.hr.dto.response.HireEmployeeResponse;
 
 @Configuration
@@ -44,6 +45,21 @@ public class ModelMapperConfiguration {
 				employee.getPhoto().toBase64()
 				);
 	};
+	private static final Converter<Employee, FireEmployeeResponse> EMPLOYEE_TO_FIRE_EMPLOYEE_RESPONSE_CONVERTER = context -> {
+		var employee = context.getSource();
+		return new FireEmployeeResponse(
+				employee.getIdentity().getValue(), 
+				employee.getFullname().firstName(), 
+				employee.getFullname().lastName(), 
+				employee.getIban().getValue(), 
+				employee.getSalary().value(), 
+				employee.getSalary().currency(), 
+				employee.getDepartments(), 
+				employee.getJobStyle(), 
+				employee.getBirthYear().value(), 
+				employee.getPhoto().toBase64()
+				);
+	};
 	private static final Converter<HireEmployeeRequest, Employee> HIRE_EMPLOYEE_REQUEST_TO_EMPLOYEE_CONVERTER = context -> {
 		var request = context.getSource();
 		return new Employee.Builder()
@@ -64,6 +80,7 @@ public class ModelMapperConfiguration {
 		modelMapper.addConverter(EMPLOYEE_TO_EMPLOYEE_RESPONSE_CONVERTER,Employee.class, EmployeeResponse.class);
 		modelMapper.addConverter(HIRE_EMPLOYEE_REQUEST_TO_EMPLOYEE_CONVERTER,HireEmployeeRequest.class, Employee.class);
 		modelMapper.addConverter(EMPLOYEE_TO_HIRE_EMPLOYEE_RESPONSE_CONVERTER,Employee.class, HireEmployeeResponse.class);
+		modelMapper.addConverter(EMPLOYEE_TO_FIRE_EMPLOYEE_RESPONSE_CONVERTER,Employee.class, FireEmployeeResponse.class);
 		return modelMapper;
 	}
 }
