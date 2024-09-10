@@ -14,4 +14,8 @@ public record Salary(double value, FiatCurrency currency) {
 	public Salary multiply(Rate rate) {
 		return new Salary(this.value * (1.0 + rate.value()), this.currency);
 	}
+	
+	public boolean lessThan(Salary threshold) {
+		return this.value < threshold.value();
+	}
 }

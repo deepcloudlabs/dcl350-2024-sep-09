@@ -7,4 +7,5 @@ public record Rate(double value) {
 			throw new IllegalArgumentException("Rate [%1.3f] must be positive".formatted(value));
 		return new Rate(value);
 	}
+
 }

@@ -1,5 +1,6 @@
 package com.example.hr.domain;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -51,6 +52,7 @@ public class Employee {
 			this.salary = Salary.valueOf(value, currency);
 			return this;
 		}
+
 		public Builder salary(double value, String currency) {
 			this.salary = Salary.valueOf(value, FiatCurrency.valueOf(currency));
 			return this;
@@ -99,6 +101,12 @@ public class Employee {
 		public Employee build() {
 			// i. validation rules
 			// ii. business rules
+			Salary MIN_WAGE = Salary.valueOf(20_000, this.salary.currency());
+			if (this.departments.contains(Department.IT)
+					&& this.jobStyle == JobStyle.FULL_TIME
+					&& this.salary.lessThan(MIN_WAGE.multiply(Rate.of(2.0)))) {
+				throw new IllegalArgumentException("BR2: FULL_TIME IT Employee's salary must be over than 3 times MIN WAGE.".formatted(salary));
+			}
 			// iii. invariants
 			// iv. constraints
 			// v. regulations/standards
@@ -149,16 +157,6 @@ public class Employee {
 		return jobStyle;
 	}
 
-	public FullName changeLastName(String lastName) {
-//        i. validation rules
-//       ii. business rules
-//      iii. invariants   
-//       iv. constraints
-//        v. regulations/standards
-		this.fullname = FullName.of(fullname.firstName(), lastName);
-		return this.fullname;
-	}
-
 	@Override
 	public int hashCode() {
 		return Objects.hash(identity);
@@ -182,13 +180,42 @@ public class Employee {
 				+ ", birthYear=" + birthYear + ", departments=" + departments + ", jobStyle=" + jobStyle + "]";
 	}
 
+	public FullName changeLastName(String lastName) {
+//        i. validation rules
+//       ii. business rules
+//      iii. invariants   
+//       iv. constraints
+//        v. regulations/standards
+		this.fullname = FullName.of(fullname.firstName(), lastName);
+		return this.fullname;
+	}
+
 	public Salary increaseSalary(Rate rate) {
+//      i. validation rules
+//     ii. business rules
+//    iii. invariants   
+//     iv. constraints
+//      v. regulations/standards
 		salary = this.salary.multiply(rate);
 		return this.salary;
 	}
 
 	public List<Department> promote(Department department) {
+//      i. validation rules
 		Objects.requireNonNull(department);
+//     ii. business rules
+		if (this.departments.contains(department))
+			throw new IllegalArgumentException("BR1: Department [%s] already exists.".formatted(department.name()));
+		if (this.departments.contains(Department.IT)
+				&& this.jobStyle == JobStyle.FULL_TIME
+				&& this.salary.multiply(Rate.of(3.0)).lessThan(Salary.valueOf(20_000, this.salary.currency()))) {
+			throw new IllegalArgumentException("BR2: Department [%s] already exists.".formatted(department.name()));
+		}
+//    iii. invariants   
+//     iv. constraints
+//      v. regulations/standards
+
+		this.departments = new ArrayList<>(this.departments);
 		this.departments.add(department);
 		return this.departments;
 	}
