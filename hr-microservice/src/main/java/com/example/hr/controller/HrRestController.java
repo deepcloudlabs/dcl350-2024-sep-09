@@ -31,17 +31,20 @@ public class HrRestController {
 	public HrRestController(HrService hrService) {
 		this.hrService = hrService;
 	}
-
+	//             application.properties  
+	// POST http://localhost:9100/hr/api/v1/employees
 	@PostMapping
 	public HireEmployeeResponse hireEmployee(@Validated @RequestBody HireEmployeeRequest request) {
 		return hrService.hireEmployee(request);
 	}
 
+	// DELETE http://localhost:9100/hr/api/v1/employees/11111111110
 	@DeleteMapping("{identity}")
 	public FireEmployeeResponse fireEmployee(@PathVariable String identity) {
 		return hrService.fireEmployee(identity);
 	}
 
+	// GET http://localhost:9100/hr/api/v1/employees/11111111110
 	@GetMapping("{identity}")
 	public EmployeeResponse findEmployeeById(@PathVariable String identity) {
 		return hrService.findEmployeeById(identity);
