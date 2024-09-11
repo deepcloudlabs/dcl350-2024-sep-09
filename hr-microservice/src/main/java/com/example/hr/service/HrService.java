@@ -8,6 +8,7 @@ import com.example.hr.application.HrApplication;
 import com.example.hr.domain.Employee;
 import com.example.hr.domain.TcKimlikNo;
 import com.example.hr.dto.request.HireEmployeeRequest;
+import com.example.hr.dto.response.EmployeeQLResponse;
 import com.example.hr.dto.response.EmployeeResponse;
 import com.example.hr.dto.response.FireEmployeeResponse;
 import com.example.hr.dto.response.HireEmployeeResponse;
@@ -41,6 +42,12 @@ public class HrService {
 				.orElseThrow(() -> new IllegalArgumentException("Employee[%s] does not exist.".formatted(identity)));
 		// map Aggregate(Employee) to EmployeeResponse
 		return modelMapper.map(employee, EmployeeResponse.class);
+	}
+
+	public EmployeeQLResponse findEmployeeByIdentity(String identity) {
+		var employee = hrApplication.findEmployee(TcKimlikNo.valueOf(identity))
+				                    .orElseThrow(() -> new IllegalArgumentException("Employee[%s] does not exist.".formatted(identity)));
+		return modelMapper.map(employee, EmployeeQLResponse.class);
 	}
 
 }

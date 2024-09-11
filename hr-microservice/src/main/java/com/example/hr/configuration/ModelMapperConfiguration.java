@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import com.example.hr.domain.Department;
 import com.example.hr.domain.Employee;
 import com.example.hr.dto.request.HireEmployeeRequest;
+import com.example.hr.dto.response.EmployeeQLResponse;
 import com.example.hr.dto.response.EmployeeResponse;
 import com.example.hr.dto.response.FireEmployeeResponse;
 import com.example.hr.dto.response.HireEmployeeResponse;
@@ -34,6 +35,22 @@ public class ModelMapperConfiguration {
 	private static final Converter<Employee, HireEmployeeResponse> EMPLOYEE_TO_HIRE_EMPLOYEE_RESPONSE_CONVERTER = context -> {
 		var employee = context.getSource();
 		return new HireEmployeeResponse(
+				employee.getIdentity().getValue(), 
+				employee.getFullname().firstName(), 
+				employee.getFullname().lastName(), 
+				employee.getIban().getValue(), 
+				employee.getSalary().value(), 
+				employee.getSalary().currency(), 
+				employee.getDepartments(), 
+				employee.getJobStyle(), 
+				employee.getBirthYear().value(), 
+				employee.getPhoto().toBase64()
+				);
+	};
+
+	private static final Converter<Employee, EmployeeQLResponse> EMPLOYEE_TO_EMPLOYEE_QLRESPONSE_CONVERTER = context -> {
+		var employee = context.getSource();
+		return new EmployeeQLResponse(
 				employee.getIdentity().getValue(), 
 				employee.getFullname().firstName(), 
 				employee.getFullname().lastName(), 
@@ -112,6 +129,7 @@ public class ModelMapperConfiguration {
 		modelMapper.addConverter(EMPLOYEE_TO_FIRE_EMPLOYEE_RESPONSE_CONVERTER,Employee.class, FireEmployeeResponse.class);
 		modelMapper.addConverter(EMPLOYEE_ENTITY_TO_EMPLOYEE_CONVERTER,EmployeeEntity.class, Employee.class);
 		modelMapper.addConverter(EMPLOYEE_TO_EMPLOYEE_ENTITY_CONVERTER,Employee.class, EmployeeEntity.class);
+		modelMapper.addConverter(EMPLOYEE_TO_EMPLOYEE_QLRESPONSE_CONVERTER,Employee.class, EmployeeQLResponse.class);
 		return modelMapper;
 	}
 }
