@@ -6,6 +6,8 @@ import java.util.Objects;
 import com.example.hr.domain.Department;
 import com.example.hr.domain.FiatCurrency;
 import com.example.hr.domain.JobStyle;
+import com.example.validation.Iban;
+import com.example.validation.TcKimlikNo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -15,28 +17,39 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "employees")
 public class EmployeeEntity {
 	@Id
+	@TcKimlikNo
 	private String identity;
 	@Column(name = "fname")
+	@NotBlank
 	private String firstName;
 	@Column(name = "lname")
+	@NotBlank
 	private String lastName;
+	@Iban
 	private String iban;
 	private double salary;
 	@Enumerated(EnumType.STRING)
+	@NotNull
 	private FiatCurrency currency;
 	@ElementCollection
 	private List<Department> departments;
 	@Enumerated(EnumType.ORDINAL)
+	@NotNull
 	private JobStyle jobStyle;
 	@Column(name = "byear")
+	@Max(2006)
 	private int birthYear;
 	@Lob
 	@Column(columnDefinition = "longblob")
+	@NotNull
 	private byte[] photo;
 
 	public EmployeeEntity() {
