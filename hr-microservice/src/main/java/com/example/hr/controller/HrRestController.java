@@ -35,7 +35,6 @@ public class HrRestController {
 	}
 	//             application.properties  
 	// POST http://localhost:9100/hr/api/v1/employees
-	@Transactional
 	@PostMapping
 	public HireEmployeeResponse hireEmployee(
 			@Validated @RequestBody HireEmployeeRequest request) {

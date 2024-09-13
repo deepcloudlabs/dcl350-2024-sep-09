@@ -24,7 +24,7 @@ public class HrService {
 		this.modelMapper = modelMapper;
 	}
 
-	@Transactional(propagation = Propagation.NEVER)
+	@Transactional
 	public HireEmployeeResponse hireEmployee(HireEmployeeRequest request) {
 		var employee = modelMapper.map(request, Employee.class);
 		var hiredEmployee = hrApplication.hireEmployee(employee);
