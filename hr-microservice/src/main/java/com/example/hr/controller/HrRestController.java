@@ -1,5 +1,6 @@
 package com.example.hr.controller;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,7 +22,6 @@ import com.example.hr.service.HrService;
 import com.example.validation.TcKimlikNo;
 
 @RestController
-@RequestScope
 @RequestMapping("/employees")
 @Validated
 @CrossOrigin
@@ -30,10 +30,12 @@ public class HrRestController {
 	private final HrService hrService;
 
 	public HrRestController(HrService hrService) {
+		System.err.println(hrService.getClass().getName());
 		this.hrService = hrService;
 	}
 	//             application.properties  
 	// POST http://localhost:9100/hr/api/v1/employees
+	@Transactional
 	@PostMapping
 	public HireEmployeeResponse hireEmployee(
 			@Validated @RequestBody HireEmployeeRequest request) {
